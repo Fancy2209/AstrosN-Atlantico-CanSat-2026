@@ -1,0 +1,19 @@
+Pressão vs Tempo
+Temperatura vs Tempo
+Altura vs Tempo
+Altitude vs Tempo
+
+Humidade vs Tempo
+Entropia vs Tempo
+
+Trajetoria
+
+Packet Kind B
+# BME
+TPH fff
+
+# BNO
+Stability Classifier B
+YPR fff
+
+# GPS
