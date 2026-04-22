@@ -1,5 +1,5 @@
 import _thread, sdcard, os
-from time import sleep_ms
+from time import sleep_ms, time
 from machine import SPI, Pin
 
 sd_buffer_lock = _thread.allocate_lock()
@@ -11,7 +11,6 @@ def sendToGround(radio, msg):
     sd_buffer.append(msg)
     sd_buffer_lock.release()
 
-sdFile = open("/sd/Data.bin", "wb")
 def sdCallback():
     while True:
         print("SD Card Flush")
@@ -25,6 +24,8 @@ def sdCallback():
         sleep_ms(1000)
 
 def initSd():
+    global sdFile
+    sdFile = open("/sd/" + str(time()) + ".bin", "wb")
     sd = sdcard.SDCard(SPI(1, sck=Pin(18), mosi=Pin(19), miso=Pin(16)), cs=Pin(17))
     os.mount(sd, "/sd")
 

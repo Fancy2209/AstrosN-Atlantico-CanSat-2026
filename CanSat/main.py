@@ -3,6 +3,7 @@ from radio import SX1262Adapter
 from sdio import initSd, sendToGround
 from sensors import Sensors, STABILITY_UNKNOWN, STABILITY_STATIONARY, STABILITY_ON_TABLE
 from time import ticks_ms, ticks_diff
+import machine
 import struct
 
 PACKET_KIND_PRIMARY   = 0
@@ -11,6 +12,7 @@ PACKET_KIND_SECONDARY = 1
 FMT_STRING_PRIMARY = "B" + "I" + "fff"
 FMT_STRING_SECONDARY = FMT_STRING_PRIMARY + "B" + "fff" + "ffff" + "ff"
 
+#machine.RTC().datetime((2026, 4, 22, 21, 48, 0, 0))
 initSd()
 radio = SX1262Adapter()
 sensors = Sensors()

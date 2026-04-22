@@ -94,7 +94,7 @@
         </Row>
 
         <Row class="justify-content-center">
-            <Map />
+            <!--Map /-->
         </Row>
     {/await}
 </Container>

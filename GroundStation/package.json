@@ -15,7 +15,6 @@
 		"@sveltejs/adapter-auto": "^7.0.1",
 		"@sveltejs/kit": "^2.57.0",
 		"@sveltejs/vite-plugin-svelte": "^7.0.0",
-		"@tailwindcss/vite": "^4.2.2",
 		"@types/d3-dsv": "^3.0.7",
 		"@types/node": "^25.6.0",
 		"d3-dsv": "^3.0.1",
@@ -25,8 +24,12 @@
 		"vite": "^8.0.7"
 	},
 	"dependencies": {
+		"@mapbox/martini": "^0.2.0",
+		"@mhaberler/cesium-martini": "file:mhaberler-cesium-martini-package.tgz",
 		"@sveltestrap/sveltestrap": "^7.1.0",
 		"cesium": "^1.140.0",
-		"svelteplot": "^0.14.2"
+		"ndarray": "^1.0.19",
+		"svelteplot": "^0.14.2",
+		"vite-plugin-cesium": "^1.2.23"
 	}
 }

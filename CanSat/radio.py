@@ -1,5 +1,4 @@
 from sx1262 import SX1262
-from sdio import sendToGround
 
 FREQ  = 433.450
 BW    = 250.0 
@@ -22,6 +21,9 @@ class SX1262Adapter():
 
     def print(self, msg):
         self.send(msg.encode())
+
+    def recieve(self, len=0, timeout_en=False, timeout_ms=0):
+        return self.sx.recv(len, timeout_en, timeout_ms)
     
     def println(self, msg):
         self.print(msg)
