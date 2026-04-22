@@ -21,25 +21,24 @@ def stabilityStrToInt(str) -> int:
 
 class Sensors():
     def __init__(self):
-        i2c = I2C(1, sda=Pin(6), scl=Pin(7), freq=400000)
+        i2c = I2C(1, sda=Pin(4), scl=Pin(5), freq=400000)
 
         self.bme = BME280(i2c=i2c)
         
-        self.gps = GPS(UART(0, baudrate=9600, tx=Pin(0), rx=Pin(1)))
-        self.gps.send_command(b'PMTK314,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0')
-        self.gps.send_command(b"PMTK220,1000")
-        
-
         self.bno = BNO08X_I2C(
             i2c,
             0x4A, 
-            Pin(4, Pin.OUT), #reset
-            Pin(3, Pin.IN, Pin.PULL_UP) #interrupt
+            Pin(14, Pin.OUT), #reset
+            Pin(6, Pin.IN, Pin.PULL_UP) #interrupt
         )
         self.bno.linear_acceleration.enable()
         self.bno.quaternion.enable()
         self.bno.stability_classifier.enable()
 
+        self.gps = GPS(UART(0, baudrate=9600, tx=Pin(0), rx=Pin(1)))
+        self.gps.send_command(b'PMTK314,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0')
+        self.gps.send_command(b"PMTK220,1000")
+        
     def read_bme(self):
         return list(self.bme.read_compensated_data())
     
