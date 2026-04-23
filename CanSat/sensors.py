@@ -21,8 +21,8 @@ def stabilityStrToInt(str) -> int:
 
 class Sensors():
     def __init__(self):
-        i2c = I2C(1, sda=Pin(4), scl=Pin(5), freq=400000)
-
+        i2c = I2C(0, sda=Pin(4), scl=Pin(5), freq=100000)
+        #print(i2c.scan())
         self.bme = BME280(i2c=i2c)
         
         self.bno = BNO08X_I2C(
@@ -45,8 +45,8 @@ class Sensors():
     def read_bno(self):
         return [
             stabilityStrToInt(self.bno.stability_classifier.value), 
-            *list(self.bno.linear_acceleration), 
-            *list(self.bno.quaternion)
+            list(self.bno.linear_acceleration), 
+            list(self.bno.quaternion)
         ]
     
     def read_gps(self):

@@ -3,18 +3,18 @@ from radio import SX1262Adapter
 from sdio import initSd, sendToGround
 from sensors import Sensors, STABILITY_UNKNOWN, STABILITY_STATIONARY, STABILITY_ON_TABLE
 from time import ticks_ms, ticks_diff
-import machine
 import struct
 
 PACKET_KIND_PRIMARY   = 0
 PACKET_KIND_SECONDARY = 1
 
-FMT_STRING_PRIMARY = "B" + "I" + "fff"
-FMT_STRING_SECONDARY = FMT_STRING_PRIMARY + "B" + "fff" + "ffff" + "ff"
+# TODO: Should I add an header?
+FMT_STRING_PRIMARY = "<" + "B" + "I" + "fff"
+FMT_STRING_SECONDARY = FMT_STRING_PRIMARY + "B" + "fff" + "ffff"# + "ff"
 
 #machine.RTC().datetime((2026, 4, 22, 21, 48, 0, 0))
 initSd()
-radio = SX1262Adapter()
+#radio = SX1262Adapter()
 sensors = Sensors()
 last_stability: int = STABILITY_UNKNOWN
 
@@ -34,14 +34,26 @@ while True:
     if time_elapsed_secondary >= 1000 and not SHOULD_CALM_DOWN:
         msg_type = PACKET_KIND_SECONDARY
         bno_vals = sensors.read_bno()
-        gps_vals = sensors.read_gps()
-        sendToGround(radio, struct.pack(FMT_STRING_SECONDARY, msg_type, time, *bme_vals, *bno_vals, *gps_vals))
+        #gps_vals = sensors.read_gps()
+        #pack = struct.pack(FMT_STRING_SECONDARY, msg_type, time, bme_vals, bno_vals)#, *gps_vals)
+        #sendToGround(radio, pack)
+        #print(struct.unpack(FMT_STRING_SECONDARY, pack))
+        print(msg_type)
+        print(time)
+        print(bme_vals)
+        print(bno_vals)
         last_stability = bno_vals[0]
 
     # we check for time_elapsed too, to make sure that if the loop took too long
     # due to the radio beeing in blocking mode we don't miss packets
     elif time_elapsed_secondary >= 500 or time_elapsed >= 500:
-        sendToGround(radio, struct.pack(FMT_STRING_PRIMARY, msg_type, time, *bme_vals))
+        print(msg_type)
+        print(time)
+        print(bme_vals)
+        #pack = struct.pack(FMT_STRING_PRIMARY, msg_type, time, bme_vals)
+        #sendToGround(radio, pack)
+        #print(struct.unpack(FMT_STRING_PRIMARY, pack))
+
 
     if msg_type == PACKET_KIND_SECONDARY:
         last_secondary = ticks_ms()

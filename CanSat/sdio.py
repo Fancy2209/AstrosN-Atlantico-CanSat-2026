@@ -25,7 +25,7 @@ def sdCallback():
 
 def initSd():
     global sdFile
-    sdFile = open("/sd/" + str(time()) + ".bin", "wb")
-    sd = sdcard.SDCard(SPI(1, sck=Pin(18), mosi=Pin(19), miso=Pin(16)), cs=Pin(17))
+    sd = sdcard.SDCard(SPI(0, sck=Pin(18), mosi=Pin(19), miso=Pin(16)), cs=Pin(17))
     os.mount(sd, "/sd")
+    sdFile = open("/sd/" + str(time()) + ".bin", "wb")
 
