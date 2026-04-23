@@ -16,7 +16,7 @@ def printAndUart(msg):
     uart.write(msg)
 
 FMT_STRING_PRIMARY = "<" + "B" + "I" + "fff"
-FMT_STRING_SECONDARY = FMT_STRING_PRIMARY + "B" + "fff"
+FMT_STRING_SECONDARY = FMT_STRING_PRIMARY + "B" + "fff" + "ffff"
 while True:
     try:
         print("HIII")

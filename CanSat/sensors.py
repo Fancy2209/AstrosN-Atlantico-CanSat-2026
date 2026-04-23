@@ -32,40 +32,29 @@ class Sensors():
             Pin(6, Pin.IN, Pin.PULL_UP) #interrupt
         )
         self.bno.linear_acceleration.enable()
-        #self.bno.quaternion.enable()
+        self.bno.quaternion.enable()
         self.bno.stability_classifier.enable()
 
-        self.gps = GPS(UART(0, baudrate=9600, tx=Pin(0), rx=Pin(1)))
-        self.gps.send_command(b'PMTK314,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0')
-        self.gps.send_command(b"PMTK220,1000")
         
     def read_bme(self):
         bme = list(self.bme.read_compensated_data())
         return [
-            bme[0],
-            bme[1],
-            bme[2]
+            bme[0], #T
+            bme[1], #P
+            bme[2]  #H
         ]
     
     def read_bno(self):
-        linear_acceleration = list(self.bno.linear_acceleration)
         return [
             stabilityStrToInt(self.bno.stability_classifier.value), 
-            linear_acceleration[0], 
-            linear_acceleration[1], 
-            linear_acceleration[2], 
-            #list(self.bno.quaternion)[0],
-            #list(self.bno.quaternion)[1],
-            #list(self.bno.quaternion)[2],
-            #list(self.bno.quaternion)[3]
+            self.bno.linear_acceleration.full[0], # Linear Acceleration X
+            self.bno.linear_acceleration.full[1], # Linear Acceleration Y
+            self.bno.linear_acceleration.full[2], # Linear Acceleration Z
+            self.bno.quaternion.full[0], # Quaternion R
+            self.bno.quaternion.full[1], # Quaternion Y
+            self.bno.quaternion.full[2], # Quaternion J
+            self.bno.quaternion.full[3]  # Quaternion K
         ]
     
-    def read_gps(self):
-        return [
-            self.gps.latitude,
-            self.gps.longitude
-        ]
-
     def update(self):
         self.bno.update_sensors()
-        self.gps.update()

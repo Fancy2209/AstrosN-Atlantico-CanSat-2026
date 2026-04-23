@@ -1,4 +1,6 @@
 from sx1262 import SX1262
+from utils_no_atlantico import digitalWrite, LOW, HIGH
+PIN_LED_RED = 7
 
 FREQ  = 433.450
 BW    = 250.0 
@@ -17,7 +19,9 @@ class SX1262Adapter():
              tcxoVoltage=1.7, useRegulatorLDO=False, blocking=True)
         
     def send(self, msg):
+        digitalWrite(PIN_LED_RED, HIGH)
         self.sx.send(msg)
+        digitalWrite(PIN_LED_RED, LOW)
 
     def print(self, msg):
         self.send(msg.encode())
