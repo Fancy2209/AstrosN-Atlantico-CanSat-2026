@@ -6,7 +6,7 @@ HIGH = 1
     
 def digitalWrite(pin, val):
     if isinstance(pin, int):
-        Pin(pin).value(val)
+        Pin(pin, Pin.OUT).value(val)
     elif isinstance(pin, Pin):
         pin.value(val)
 

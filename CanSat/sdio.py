@@ -4,16 +4,17 @@ from machine import SPI, Pin
 
 sd_buffer_lock = _thread.allocate_lock()
 sd_buffer = []
-def sendToGround(radio, msg):
+def send_to_ground(radio, msg, no_sd):
     radio.send(msg)
 
-    sd_buffer_lock.acquire()
-    sd_buffer.append(msg)
-    sd_buffer_lock.release()
+    if not no_sd:
+        sd_buffer_lock.acquire()
+        sd_buffer.append(msg)
+        sd_buffer_lock.release()
 
-def sdCallback():
+def sd_callback():
     while True:
-        print("SD Card Flush")
+        #print("SD Card Flush")
         sd_buffer_lock.acquire()
 
         while len(sd_buffer) > 0:
@@ -23,9 +24,9 @@ def sdCallback():
         sd_buffer_lock.release()
         sleep_ms(1000)
 
-def initSd():
+def init_sd():
     global sdFile
     sd = sdcard.SDCard(SPI(0, sck=Pin(18), mosi=Pin(19), miso=Pin(16)), cs=Pin(17))
     os.mount(sd, "/sd")
-    sdFile = open("/sd/" + str(time()) + ".bin", "wb")
-
+    sdFile = open("/sd/" + "data" + str(len(os.listdir("/sd/"))+1) + ".bin", "wb")
+    _thread.start_new_thread(sd_callback, [])
