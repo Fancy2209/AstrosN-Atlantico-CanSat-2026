@@ -58,9 +58,15 @@ while True:
         bme_vals = sensors.read_bme()
 
         time_elapsed = ticks_diff(ticks_ms(), last_read)
-        ticks_mstime_elapsed_secondary = ticks_diff(ticks_ms(), last_read_secondary)
+        time_elapsed_secondary = ticks_diff(ticks_ms(), last_read_secondary)
 
-        if (ticks_mstime_elapsed_secondary >= 1_000 and not SHOULD_CALM_DOWN) or (ticks_mstime_elapsed_secondary >= 10_000 and SHOULD_CALM_DOWN):
+        if (SHOULD_CALM_DOWN and (time_elapsed >= 10000)) or (not SHOULD_CALM_DOWN and (time_elapsed >= 500)):
+            pack = struct.pack(FMT_STRING_PRIMARY, msg_type, ticks_ms(), bme_vals[0], bme_vals[1], bme_vals[2])
+            send_to_ground(radio, pack, no_sd, msg_type)
+            print(struct.unpack(FMT_STRING_PRIMARY, pack))
+            last_read = ticks_ms()
+
+        if (SHOULD_CALM_DOWN and time_elapsed_secondary >= 10000) or (not SHOULD_CALM_DOWN and time_elapsed_secondary >= 1000):
             msg_type = PACKET_KIND_SECONDARY
             bno_vals = sensors.read_bno()
             sleep_ms(50)
@@ -83,13 +89,6 @@ while True:
             beep = False
             digitalWrite(PIN_BUZZER, False)
 
-        # we check for time_elapsed too, to make sure that if the loop took too long
-        # due to the radio beeing in blocking mode we don't miss packets
-        if (SHOULD_CALM_DOWN and (time_elapsed >= 10_000)) or (not SHOULD_CALM_DOWN and (time_elapsed >= 500)):
-            pack = struct.pack(FMT_STRING_PRIMARY, msg_type, ticks_ms()/1000, bme_vals[0], bme_vals[1], bme_vals[2])
-            send_to_ground(radio, pack, no_sd, msg_type)
-            print(struct.unpack(FMT_STRING_PRIMARY, pack))
-            last_read = ticks_ms()
     except Exception as exp:
         print("Died")
         sys.print_exception(exp)
@@ -102,9 +101,3 @@ while True:
         #    sdFile.close()
         #    os.umount("/sd")
         #    break
-        
-
-
-    
-
-    

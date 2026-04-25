@@ -10,7 +10,13 @@
 <Navbar color="dark-subtle" dark expand="md" container="md">
     <NavbarBrand href="/" class="d-flex align-items-center gap-2">
         <Image fluid src="/images/logofinal.svg" width=60 />
-        Astros Nó Atlantico
+        Astros Nó Atlântico
     </NavbarBrand>
 </Navbar>
 {@render children()}
+
+<style>
+    :global(.h2), :global(h2) {
+        text-align: center;
+    }
+</style>

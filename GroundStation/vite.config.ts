@@ -9,5 +9,5 @@ export default defineConfig({
       },
       global: "globalThis",
     },
-    plugins: [sveltekit(), cesium()] 
+    plugins: [sveltekit()] 
 });

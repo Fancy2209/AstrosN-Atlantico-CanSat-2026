@@ -41,7 +41,7 @@ class Sensors():
         return [
             bme[0], #T
             bme[1], #P
-            bme[2]  #H
+            bme[2]  #H          
         ]
     
     def read_bno(self):
